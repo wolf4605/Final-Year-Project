@@ -1,0 +1,770 @@
+/* ============================================================
+   1. GLOBAL THEME VARIABLES
+   These variables define shared colors, fonts, shadows and
+   border radii used throughout the Scalar API documentation.
+   ============================================================ */
+
+:root {
+    --brand-500: #d98b24;
+    /* Primary brand orange: buttons and accents */
+    --brand-600: #b76b0e;
+    /* Darker orange: hover states and emphasis */
+
+    --surface-glass: rgb(255 255 255 / 82%);
+    /* Translucent header background */
+    --shadow-soft: 0 10px 30px rgb(31 41 72 / 7%);
+    /* Soft shadows on code blocks */
+
+    --radius-sm: 8px;
+    /* Small corners: buttons, inputs and sidebar links */
+    --radius-md: 12px;
+    /* Medium corners: panels, tabs, tables and code blocks */
+    --radius-lg: 18px;
+    /* Large corners: larger containers and surfaces */
+
+    --scalar-font: "Segoe UI Variable", "Segoe UI", sans-serif;
+    /* Main font: paragraphs, labels, navigation and controls */
+
+    --scalar-font-heading: "Trebuchet MS", "Segoe UI", sans-serif;
+    /* Heading font: API title, section titles and headings */
+
+    --scalar-font-code: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    /* Code font: request examples, JSON, code snippets and preformatted text */
+
+    --scalar-radius: var(--radius-md);
+    /* Scalar's standard component corner radius */
+
+    --scalar-radius-lg: var(--radius-lg);
+    /* Scalar's large component corner radius */
+
+    --scalar-text-decoration: none;
+    /* Default text decoration for Scalar links */
+
+    --scalar-text-decoration-hover: none;
+    /* Text decoration for links when hovered */
+
+    --scalar-color-accent: var(--brand-500);
+    /* Default accent color: interactive elements and highlights */
+
+    --scalar-color-green: #0a8c62;
+    /* Green semantic color: typically GET endpoints and success indicators */
+
+    --scalar-color-blue: #356cc5;
+    /* Blue semantic color: POST endpoints in this stylesheet */
+
+    --scalar-color-orange: #b76b0e;
+    /* Orange semantic color: PUT and PATCH endpoints */
+
+    --scalar-color-red: #c94048;
+    /* Red semantic color: DELETE endpoints and destructive actions */
+}
+
+
+/* ============================================================
+   2. LIGHT MODE
+   Controls colors and surfaces when Scalar uses light mode.
+   ============================================================ */
+
+.light-mode {
+    color-scheme: light;
+    /* Tells the browser to use light-mode native controls and widgets */
+
+    --scalar-background-1: #fff;
+    /* Main page background, cards and primary surfaces */
+
+    --scalar-background-2: #f8f9fd;
+    /* Secondary surfaces: sidebar and subtle panel backgrounds */
+
+    --scalar-background-3: #f0f2f9;
+    /* Tertiary surfaces: nested sections and stronger background contrast */
+
+    --scalar-background-accent: rgb(217 139 36 / 9%);
+    /* Subtle orange tint: highlighted controls and selected surfaces */
+
+    --scalar-color-1: #1c2438;
+    /* Primary text: headings, titles and prominent content */
+
+    --scalar-color-2: #526078;
+    /* Secondary text: descriptions, paragraphs and supporting information */
+
+    --scalar-color-3: #78859b;
+    /* Muted text: less prominent labels and metadata */
+
+    --scalar-color-accent: var(--brand-600);
+    /* Light-mode accent: links, focus states and interactive highlights */
+
+    --scalar-border-color: #e5e8f1;
+    /* Standard borders: panels, tables, inputs and navigation separators */
+
+    --scalar-code-background: #f5f6fb;
+    /* Background behind code examples and code blocks */
+
+    --scalar-button-1: var(--brand-500);
+    /* Primary button background, when supported by Scalar */
+
+    --scalar-button-1-color: #fff;
+    /* Text and icon color on primary buttons */
+
+    --scalar-button-1-hover: var(--brand-600);
+    /* Primary button background when hovered */
+
+    --surface-glass: rgb(255 255 255 / 86%);
+    /* Light-mode translucent header background */
+}
+
+
+/* ============================================================
+   3. DARK MODE
+   Controls colors and surfaces when Scalar uses dark mode.
+   ============================================================ */
+
+.dark-mode {
+    color-scheme: dark;
+    /* Tells the browser to use dark-mode native controls and widgets */
+
+    --brand-500: #ff6b0b;
+    /* Dark-mode primary orange */
+
+    --brand-600: #e85800;
+    /* Dark-mode darker orange for hover states */
+
+    --scalar-background-1: #0c0b0f;
+    /* Main dark page background */
+
+    --scalar-background-2: #121217;
+    /* Secondary surfaces: sidebar and navigation backgrounds */
+
+    --scalar-background-3: #1b1b22;
+    /* Tertiary surfaces: nested panels and elevated backgrounds */
+
+    --scalar-background-accent: rgb(255 107 11 / 12%);
+    /* Translucent orange highlight for selected or focused surfaces */
+
+    --scalar-color-1: #f3f1ed;
+    /* Primary text and headings */
+
+    --scalar-color-2: #aaa8ae;
+    /* Secondary text and descriptions */
+
+    --scalar-color-3: #777681;
+    /* Muted text, less prominent labels and metadata */
+
+    --scalar-color-accent: #ff8a32;
+    /* Dark-mode accent: links, highlights and focus indicators */
+
+    --scalar-color-green: #20c997;
+    /* Brighter green for GET endpoints and success indicators */
+
+    --scalar-color-blue: #9caec4;
+    /* Muted blue semantic color for applicable endpoints */
+
+    --scalar-color-orange: #f2bd43;
+    /* Gold/orange semantic color for applicable endpoints */
+
+    --scalar-color-red: #ff625e;
+    /* Bright red for DELETE endpoints and destructive actions */
+
+    --scalar-border-color: #2b2a32;
+    /* Dark borders around panels, controls and tables */
+
+    --scalar-code-background: #111116;
+    /* Background of code examples and code blocks */
+
+    --scalar-button-1: #ff6b0b;
+    /* Primary button background in dark mode */
+
+    --scalar-button-1-color: #fff;
+    /* Primary button text and icon color */
+
+    --scalar-button-1-hover: #ff812c;
+    /* Primary button hover background */
+
+    --surface-glass: rgb(12 11 15 / 90%);
+    /* Translucent dark header background */
+
+    --shadow-soft: 0 12px 36px rgb(0 0 0 / 28%);
+    /* Dark-mode shadow for code blocks and elevated surfaces */
+}
+
+
+/* ============================================================
+   4. PAGE SCROLLING
+   ============================================================ */
+
+html {
+    scroll-behavior: smooth;
+    /* Smooth scrolling when navigating between API sections */
+
+    scroll-padding-top: 5rem;
+    /* Offset for anchor navigation so headings aren't hidden by the header */
+}
+
+
+/* ============================================================
+   5. GLOBAL FONT AND TEXT RENDERING
+   ============================================================ */
+
+body,
+.scalar-app {
+    font-family: var(--scalar-font);
+    /* Main typography for the page and Scalar application */
+
+    letter-spacing: -0.01em;
+    /* Slightly tightens text spacing */
+
+    -webkit-font-smoothing: antialiased;
+    /* Smooths font rendering in WebKit-based browsers */
+
+    text-rendering: optimizeLegibility;
+    /* Requests improved text legibility and typographic rendering */
+}
+
+
+/* ============================================================
+   6. PAGE BACKGROUND GRADIENTS
+   ============================================================ */
+
+body.light-mode {
+    background:
+        radial-gradient(ellipse at 55% -20%,
+            rgb(112 106 244 / 9%),
+            transparent 44%),
+        var(--scalar-background-1);
+    /* Adds a subtle violet glow at the top of the light-mode page */
+}
+
+body.dark-mode {
+    background:
+        radial-gradient(ellipse at 52% -24%,
+            rgb(255 107 11 / 11%),
+            transparent 45%),
+        radial-gradient(ellipse at 100% 45%,
+            rgb(242 189 67 / 4%),
+            transparent 40%),
+        var(--scalar-background-1);
+    /* Adds orange top glow, subtle right-side gold glow and dark base */
+}
+
+
+/* ============================================================
+   7. MAIN SCALAR APPLICATION CONTAINER
+   ============================================================ */
+
+.scalar-app {
+    color: var(--scalar-color-1);
+    /* Default text color across the Scalar interface */
+
+    background: transparent;
+    /* Allows the body gradients to remain visible behind Scalar */
+}
+
+
+/* ============================================================
+   8. HEADINGS
+   ============================================================ */
+
+.scalar-app :where(h1, h2, h3, h4) {
+    font-family: var(--scalar-font-heading);
+    /* Font for all heading levels */
+
+    color: var(--scalar-color-1);
+    /* Heading text color */
+
+    font-weight: 680;
+    /* Makes headings prominent */
+
+    line-height: 1.16;
+    /* Controls vertical spacing within headings */
+
+    letter-spacing: -0.045em;
+    /* Tightens heading characters */
+
+    text-wrap: balance;
+    /* Balances multiline headings where supported */
+}
+
+.scalar-app h1 {
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    /* Main API title: responsive size between 2rem and 2.8rem */
+}
+
+.scalar-app h2 {
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    /* Second-level headings: API sections and major content headings */
+}
+
+
+/* ============================================================
+   9. PARAGRAPHS, LISTS AND SECTION LABELS
+   ============================================================ */
+
+.scalar-app :where(p, li) {
+    line-height: 1.75;
+    /* Improves readability of paragraphs and list items */
+}
+
+.scalar-app :where(p, li, label, small) {
+    font-family: var(--scalar-font);
+    /* Applies the main font to body text, labels and small text */
+}
+
+.scalar-app .section-header-label {
+    font-family: var(--scalar-font-heading);
+    /* Font for Scalar section header labels, if present */
+
+    font-weight: 680;
+    /* Emphasizes section header labels */
+}
+
+.dark-mode .scalar-app :where(.section-header-label, h1, h2, h3, h4) {
+    color: #f5f2ec;
+    /* Forces headings and section labels to a warm off-white in dark mode */
+}
+
+.dark-mode .scalar-app :where(p, li, label, small) {
+    color: var(--scalar-color-2);
+    /* Makes paragraphs, list items, labels and small text muted gray */
+}
+
+.dark-mode .scalar-app :where(b, strong, th) {
+    color: #f5f2ec;
+    /* Brightens bold text, strong text and table headers */
+
+}
+
+.dark-mode .scalar-app :where(code, kbd) {
+    color: #ffd17a;
+    /* Gold text for inline code and keyboard-key elements */
+}
+
+
+/* ============================================================
+   10. LINKS AND KEYBOARD FOCUS
+   ============================================================ */
+
+.scalar-app a {
+    text-decoration: none;
+    /* Removes underlines from Scalar links */
+
+    transition: color 160ms ease, background-color 160ms ease;
+    /* Smoothly animates link color and background changes */
+}
+
+.scalar-app a:hover {
+    color: var(--scalar-color-accent);
+    /* Changes link text to the active accent color on hover */
+}
+
+.scalar-app :where(a, button, input, textarea, select):focus-visible {
+    outline: 2px solid var(--scalar-color-accent);
+    /* Visible keyboard-focus outline for links, buttons and form controls */
+
+    outline-offset: 3px;
+    /* Separates the focus outline from the focused element */
+}
+
+.scalar-app :where(button, input, textarea, select) {
+    font: inherit;
+    /* Makes buttons and form controls inherit surrounding typography */
+}
+
+
+/* ============================================================
+   11. HEADER AND TOP TOOLBAR
+   ============================================================ */
+
+.scalar-app header:not(.api-reference-toolbar) {
+    border-color: var(--scalar-border-color);
+    /* Border color of headers other than the API reference toolbar */
+
+    background: var(--surface-glass);
+    /* Translucent header background */
+
+    box-shadow: 0 1px 0 rgb(31 41 72 / 3%);
+    /* Very subtle bottom shadow */
+
+    backdrop-filter: blur(16px);
+    /* Blurs content behind the header for a glass effect */
+}
+
+.scalar-app .api-reference-toolbar {
+    border-color: var(--scalar-border-color);
+    /* Border around Scalar's API reference toolbar */
+
+    background: var(--scalar-background-1);
+    /* Background of the toolbar containing API reference controls */
+}
+
+
+/* ============================================================
+   12. DOCUMENTATION SIDEBAR
+   ============================================================ */
+
+.scalar-app .t-doc__sidebar {
+    border-color: var(--scalar-border-color);
+    /* Sidebar border and separator color */
+
+    background: var(--scalar-background-2);
+    /* Background behind API tags, endpoints and sidebar navigation */
+}
+
+.scalar-app aside a {
+    border-radius: var(--radius-sm);
+    /* Rounded corners on links inside sidebar/aside elements */
+}
+
+.light-mode .scalar-app aside a[aria-current="page"],
+.light-mode .scalar-app aside [aria-selected="true"] {
+    color: var(--brand-600);
+    /* Text color of the currently selected sidebar item in light mode */
+
+    background: rgb(217 139 36 / 10%);
+    /* Light orange background behind the selected item */
+}
+
+.dark-mode .scalar-app aside a[aria-current="page"],
+.dark-mode .scalar-app aside [aria-selected="true"] {
+    color: #ffad62;
+    /* Text color of the selected sidebar item in dark mode */
+
+    background: rgb(255 107 11 / 13%);
+    /* Orange-tinted selected item background */
+}
+
+.dark-mode .scalar-app aside a:hover {
+    color: #ffd17a;
+    /* Text color when hovering over a sidebar link in dark mode */
+
+    background: rgb(255 255 255 / 4%);
+    /* Subtle background on sidebar hover */
+}
+
+
+/* ============================================================
+   13. MAIN DOCUMENTATION CONTENT
+   ============================================================ */
+
+.scalar-app main {
+    scroll-margin-top: 5rem;
+    /* Adds space above a section when navigating to its anchor */
+}
+
+.scalar-app [role="tabpanel"] {
+    border-color: var(--scalar-border-color);
+    /* Border color of tab panels */
+
+    border-radius: var(--radius-md);
+    /* Rounded corners of tab panels */
+}
+
+
+/* ============================================================
+   14. BUTTONS
+   ============================================================ */
+
+.scalar-app button {
+    border-radius: var(--radius-sm);
+    /* Rounded corners for buttons throughout Scalar */
+
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+    /* Smooth transitions for button colors, borders, shadows and movement */
+}
+
+.scalar-app button:active {
+    transform: translateY(1px);
+    /* Moves a pressed button down by 1px for a click effect */
+}
+
+.dark-mode .scalar-app button:hover {
+    border-color: rgb(255 138 50 / 36%);
+    /* Orange-tinted border on button hover in dark mode */
+}
+
+.dark-mode .scalar-app :where(button[class*="bg-b-btn"],
+    [role="button"][class*="bg-b-btn"]) {
+    color: #17110b;
+    /* Dark text on buttons matching Scalar's bg-b-btn class pattern */
+
+    background-color: #f2bd43;
+    /* Gold background on matching buttons in dark mode */
+}
+
+
+/* ============================================================
+   15. INPUTS, TEXTAREAS AND SELECT MENUS
+   ============================================================ */
+
+.scalar-app :where(input, textarea, select) {
+    border: 1px solid var(--scalar-border-color);
+    /* Border around search fields, inputs, textareas and select controls */
+
+    border-radius: var(--radius-sm);
+    /* Rounded corners of form controls */
+
+    color: var(--scalar-color-1);
+    /* Text color entered into form controls */
+
+    background-color: var(--scalar-background-1);
+    /* Background of inputs and select controls */
+
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+    /* Smooth focus and border transitions */
+}
+
+.scalar-app :where(input, textarea, select):focus {
+    border-color: var(--scalar-color-accent);
+    /* Changes the border to the accent color when focused */
+
+    box-shadow: 0 0 0 3px var(--scalar-background-accent);
+    /* Adds a subtle accent-colored focus ring */
+}
+
+
+/* ============================================================
+   16. CODE BLOCKS AND CODE TYPOGRAPHY
+   ============================================================ */
+
+.scalar-app pre {
+    overflow-x: auto;
+    /* Allows horizontal scrolling for long code lines */
+
+    border: 1px solid var(--scalar-border-color);
+    /* Border around preformatted code blocks */
+
+    border-radius: var(--radius-md);
+    /* Rounded corners around code examples */
+
+    background: var(--scalar-code-background);
+    /* Code block background color */
+
+    box-shadow: var(--shadow-soft);
+    /* Soft shadow below code blocks */
+
+    font-size: 0.875rem;
+    /* Base font size inside preformatted code blocks */
+
+    line-height: 1.7;
+    /* Vertical spacing between code lines */
+}
+
+.scalar-app code,
+.scalar-app pre {
+    font-family: var(--scalar-font-code);
+    /* Monospaced font for inline code and code blocks */
+}
+
+.scalar-app code {
+    font-size: 0.9em;
+    /* Inline code is slightly smaller than its surrounding text */
+}
+
+
+/* ============================================================
+   17. TABLES
+   ============================================================ */
+
+.scalar-app table {
+    overflow: hidden;
+    /* Clips content that extends beyond the table's rounded corners */
+
+    border-color: var(--scalar-border-color);
+    /* Table border color */
+
+    border-collapse: separate;
+    /* Allows individual cell borders and rounded table corners */
+
+    border-spacing: 0;
+    /* Removes gaps between adjacent cells */
+
+    border-radius: var(--radius-md);
+    /* Rounds the outer corners of the table */
+}
+
+.scalar-app th {
+    color: var(--scalar-color-1);
+    /* Header-cell text color */
+
+    background: var(--scalar-background-2);
+    /* Table column header background */
+
+    font-weight: 650;
+    /* Emphasizes column headings */
+}
+
+.dark-mode .scalar-app th {
+    background: #19191f;
+    /* Dark-mode table header background */
+}
+
+.dark-mode .scalar-app :where(pre, .hljs) {
+    color: #d4d3d7;
+    /* Default code text color for pre blocks and Highlight.js elements */
+}
+
+.dark-mode .scalar-app .hljs-string,
+.dark-mode .scalar-app .hljs-attr {
+    color: #f2bd43;
+    /* Gold syntax highlighting for strings and attributes */
+}
+
+.dark-mode .scalar-app .hljs-number,
+.dark-mode .scalar-app .hljs-literal {
+    color: #20c997;
+    /* Green syntax highlighting for numbers and literals */
+}
+
+.dark-mode .scalar-app .hljs-keyword,
+.dark-mode .scalar-app .hljs-built_in {
+    color: #ff8a32;
+    /* Orange syntax highlighting for keywords and built-in values */
+}
+
+.scalar-app :where(td, th) {
+    padding: 0.8rem 0.9rem;
+    /* Inner spacing in all table cells */
+
+    border-color: var(--scalar-border-color);
+    /* Borders separating table rows and columns */
+}
+
+
+/* ============================================================
+   18. DIVIDERS AND HORIZONTAL RULES
+   ============================================================ */
+
+.scalar-app :where(hr, [role="separator"]) {
+    border-color: var(--scalar-border-color);
+    /* Divider lines between sections and separator elements */
+}
+
+
+/* ============================================================
+   19. HTTP METHOD COLORS
+   These selectors target elements with matching data-method values.
+   Exact coverage depends on Scalar's rendered HTML.
+   ============================================================ */
+
+.scalar-app [data-method="get"] {
+    color: var(--scalar-color-green);
+    /* GET method text or badges: green */
+}
+
+.dark-mode .scalar-app [data-method="post"] {
+    color: #ff8a32;
+    /* POST method text or badges in dark mode: orange */
+}
+
+.dark-mode .scalar-app :where([data-method="put"],
+    [data-method="patch"]) {
+    color: #f2bd43;
+    /* PUT and PATCH method text or badges in dark mode: gold */
+}
+
+.scalar-app [data-method="post"] {
+    color: var(--scalar-color-blue);
+    /* POST method text or badges in light mode: blue */
+}
+
+.scalar-app :where([data-method="put"],
+    [data-method="patch"]) {
+    color: var(--scalar-color-orange);
+    /* PUT and PATCH method text or badges in light mode: orange */
+}
+
+.scalar-app [data-method="delete"] {
+    color: var(--scalar-color-red);
+    /* DELETE method text or badges: red */
+
+
+    /* ============================================================
+   20. SCROLLBARS
+   ============================================================ */
+
+    .scalar-app * {
+        scrollbar-color: var(--scalar-color-3) transparent;
+        /* Firefox: muted scrollbar thumb with transparent track */
+
+        scrollbar-width: thin;
+        /* Firefox: thin scrollbars throughout Scalar */
+    }
+
+    .scalar-app ::-webkit-scrollbar {
+        width: 8px;
+        /* Width of vertical scrollbars in Chromium and WebKit */
+
+        height: 8px;
+        /* Height of horizontal scrollbars in Chromium and WebKit */
+    }
+
+    .scalar-app ::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        /* Creates spacing around the scrollbar thumb */
+
+        border-radius: 999px;
+        /* Makes the scrollbar thumb fully rounded */
+
+        background: var(--scalar-color-3);
+        /* Scrollbar thumb color */
+
+        background-clip: padding-box;
+        /* Keeps the thumb background inside the padding boundary */
+    }
+
+
+    /* ============================================================
+   21. RESPONSIVE STYLES
+   Applies to screens 768px wide or narrower.
+   ============================================================ */
+
+    @media (max-width: 768px) {
+        html {
+            scroll-padding-top: 4rem;
+            /* Smaller anchor offset on mobile screens */
+        }
+
+        .scalar-app h1 {
+            font-size: 2rem;
+            /* Fixed main heading size on smaller screens */
+        }
+
+        .scalar-app h2 {
+            font-size: 1.4rem;
+            /* Fixed second-level heading size on smaller screens */
+        }
+
+        .scalar-app pre {
+            font-size: 0.8rem;
+            /* Smaller code text to fit narrow screens */
+        }
+    }
+
+
+    /* ============================================================
+   22. ACCESSIBILITY: REDUCED MOTION
+   Respects the user's operating-system animation preference.
+   ============================================================ */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            scroll-behavior: auto !important;
+            /* Disables smooth scrolling */
+
+            animation-duration: 0.01ms !important;
+            /* Virtually eliminates animation duration */
+
+            animation-iteration-count: 1 !important;
+            /* Prevents repeated animations */
+
+            transition-duration: 0.01ms !important;
+            /* Virtually eliminates transition animations */
+        }
+    }
+}

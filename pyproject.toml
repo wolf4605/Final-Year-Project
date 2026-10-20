@@ -1,0 +1,23 @@
+[project]
+name = "BondVaut PK"
+
+version = "0.1.0"
+
+description = "Manage Pakistani prize-bond lists and user sessions.\nRegister an account and sign in to receive bearer access and refresh tokens. Send the access token in the `Authorization: Bearer <token>` header to use protected user and bond operations. Refresh and logout operations use a refresh token in the request body. User refresh and logout routes also require an active user access token.\nAdministrator authentication is provided separately. Sessions expire after 15 minutes without activity, and active sessions are cleared when the application process restarts."
+
+summary = "Manage prize-bond lists and authenticated user sessions."
+
+readme = "README.md"
+
+authors = [
+    { name = "Muhammad Awais Bilal", email = "mab4605@gmail.com"},
+    ]
+liscense = "https://rem.mit-license.org/?copyright=Remy%20Sharp&url=http%3A%2F%2Fremysharp.com&email=me%40mysite.com&format=html"
+
+requires-python = ">=3.14"
+
+dependencies = [
+    "asyncpg>=0.32.0",
+    "fastapi[standard]>=0.150.0",
+    "scalar-fastapi>=1.9.1",
+]
