@@ -23,7 +23,10 @@ class _AppSettings(BaseSettings):
     Description: str = Field(default=..., alias="description", description="A detailed explaination of the Project.")
     """A detailed explaination of the Project."""
     Contact: list[dict[str,str]] = Field(default=..., alias="authors", description="A detailed explaination of the Project.")
-
+    """Contact info of the authors of the application."""
+    License: dict[str,str] = Field(default=..., alias="licence", description= "The applications liscense page.")
+    """The applications license page."""
+    
     model_config = SettingsConfigDict(
         toml_file=Path(__file__).parent.parent.parent.joinpath("pyproject.toml"),
         toml_table_header= ("project",),

@@ -12,7 +12,7 @@ readme = "README.md"
 authors = [
     { name = "Muhammad Awais Bilal", email = "mab4605@gmail.com"},
     ]
-liscense = "https://rem.mit-license.org/?copyright=Remy%20Sharp&url=http%3A%2F%2Fremysharp.com&email=me%40mysite.com&format=html"
+licence = {name = "MIT License", "identifier" = "MIT", url = "https://wolf4605.github.io/bondvaultpk.github.io/"}
 
 requires-python = ">=3.14"
 

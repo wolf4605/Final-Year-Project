@@ -15,8 +15,7 @@ app = FastAPI(
     description= AppSettings.Description,
     terms_of_service=None,
     contact=AppSettings.Contact[0],
-    license_info=AppSettings.Liscense
-
+    license_info=AppSettings.License
 )
 """
 The main application variable used to run the Backend.
@@ -40,6 +39,7 @@ async def setup_scalar() -> HTMLResponse:
 
     css_data:str = f"<head><style>{Path(__file__).parent.joinpath("src").joinpath("static").joinpath("scalar_theme.css").read_text(encoding="utf-8")}</style></head>"
     return get_scalar_api_reference(
+        scalar_favicon_url = "https://raw.githubusercontent.com/wolf4605/bondvaultpk.github.io/refs/heads/main/src/assets/logo.svg",
         title= app.title,
         openapi_url= app.openapi_url,
         hide_models= True,
