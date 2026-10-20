@@ -1,0 +1,697 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101318">
+
+    <meta name="description"
+          content="MIT License for BondVault PK. Review the terms governing the use, copying, modification, and distribution of this software.">
+
+    <title>MIT License — BondVault PK</title>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #f8f9fb;
+            --surface: #ffffff;
+            --surface-alt: #f3f5f8;
+            --text: #182230;
+            --muted: #667085;
+            --accent: #b76b0e;
+            --accent-bg: #fff5e8;
+            --border: #e4e7ec;
+            --code-bg: #f5f6f8;
+            --shadow: 0 8px 30px rgb(16 24 40 / 4%);
+        }
+
+        :root.dark {
+            color-scheme: dark;
+            --bg: #101318;
+            --surface: #171b22;
+            --surface-alt: #1d232c;
+            --text: #edf1f7;
+            --muted: #a0aaba;
+            --accent: #f0ad55;
+            --accent-bg: #302518;
+            --border: #303744;
+            --code-bg: #13171d;
+            --shadow: 0 8px 30px rgb(0 0 0 / 12%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family:
+                Inter, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            font-size: 15px;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .container {
+            width: min(100% - 40px, 960px);
+            margin-inline: auto;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            min-height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: var(--text);
+            font-weight: 750;
+            font-size: 16px;
+            letter-spacing: -0.4px;
+        }
+
+        .brand:hover {
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            height: 36px;
+            background: var(--accent-bg);
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-mark img {
+            display: block;
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .brand span:last-child {
+            display: block;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-link {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface-alt);
+        }
+
+        main {
+            padding: 66px 0 80px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        h1 {
+            margin: 18px 0 16px;
+            font-size: clamp(36px, 6vw, 54px);
+            line-height: 1.12;
+            letter-spacing: -2px;
+            font-weight: 780;
+        }
+
+        .intro {
+            max-width: 650px;
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .license-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .license-badge span {
+            color: var(--accent);
+        }
+
+        .metadata {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin: 38px 0 46px;
+        }
+
+        .meta-card {
+            padding: 22px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .meta-label {
+            margin-bottom: 7px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 750;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-wrap: anywhere;
+        }
+        
+        .holder-img {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .meta-description {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .document {
+            overflow: hidden;
+            background: var(--surface);
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .document-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 26px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-alt);
+        }
+
+        .document-heading {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 750;
+        }
+
+        .document-subheading {
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .copy-button {
+            flex-shrink: 0;
+            padding: 9px 13px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            border-color: var(--accent);
+        }
+
+        .license-content {
+            padding: 30px 32px;
+        }
+
+        .license-content h2 {
+            margin: 0 0 22px;
+            font-size: 24px;
+            letter-spacing: -0.6px;
+        }
+
+        .license-content p {
+            margin: 0 0 20px;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .license-content .copyright {
+            color: var(--text);
+            font-weight: 650;
+        }
+
+        .license-content .legal-text {
+            color: var(--text);
+            font-size: 13px;
+            line-height: 1.95;
+        }
+
+        .license-content .legal-text p {
+            color: inherit;
+        }
+
+        .notice {
+            margin-top: 24px;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--accent-bg);
+        }
+
+        .notice strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .notice p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-block: 27px;
+        }
+
+        .footer-text {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: min(100% - 28px, 960px);
+            }
+
+            main {
+                padding-top: 44px;
+            }
+
+            h1 {
+                letter-spacing: -1.4px;
+            }
+
+            .intro {
+                font-size: 15px;
+            }
+
+            .metadata {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin: 28px 0 32px;
+            }
+
+            .meta-card {
+                padding: 18px;
+            }
+
+            .document-header {
+                align-items: flex-start;
+                padding: 18px;
+            }
+
+            .license-content {
+                padding: 24px 18px;
+            }
+
+            .license-content h2 {
+                font-size: 21px;
+            }
+
+            .footer-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: none;
+            }
+        }
+
+        @media print {
+            .navbar,
+            .nav-actions,
+            .copy-button,
+            footer,
+            .notice {
+                display: none !important;
+            }
+
+            body {
+                background: #fff;
+                color: #000;
+            }
+
+            main {
+                padding: 0;
+            }
+
+            .document {
+                border: none;
+                box-shadow: none;
+            }
+
+            .license-content p {
+                color: #000;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container nav-inner">
+            <a class="brand" href="#top" aria-label="ult PK home">
+                <img src="./src/assets/image_ae1cf991.svg" alt="" width="50" height="50"  style="border-radius: 15px;">
+                <span>
+                    General Liscense
+                    <small>Legal documentation</small>
+                </span>
+            </a>
+
+            <div class="nav-actions">
+                <a class="nav-link" href="#license">View license</a>
+                <button
+                    class="theme-toggle"
+                    id="theme-toggle"
+                    type="button"
+                    aria-label="Switch color theme"
+                    title="Switch color theme"
+                >☾</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+        <div class="container">
+            <div class="eyebrow">Open-source license</div>
+
+            <h1>MIT License</h1>
+
+            <p class="intro">
+                The terms and conditions governing the use, copying,
+                modification, merging, publishing, distribution,
+                sublicensing, and sale of BondVault PK software.
+            </p>
+
+            <div class="license-badge">
+                <span>●</span> MIT
+                <span>·</span> Permissive open-source license
+            </div>
+
+           <section class="metadata" aria-label="License information"> 
+              <div class="meta-card"> 
+                <div class="meta-label">Copyright holder</div> 
+                <!-- Added the image and wrapped text in a span -->
+                <div class="meta-value">
+                  <img src="https://avatars.githubusercontent.com/u/125435168" alt="wolf_4605 avatar" class="holder-img">
+                  <span>wolf4605</span>
+                </div> 
+              </div> 
+              <div class="meta-card"> 
+                <div class="meta-label">License type</div> 
+                <div class="meta-value">MIT License</div> 
+                <div class="meta-description"> SPDX identifier: MIT </div> 
+              </div> 
+            </section>
+
+            <section class="document" id="license">
+                <div class="document-header">
+                    <div>
+                        <h2 class="document-heading">License agreement</h2>
+                        <div class="document-subheading">
+                            Full license text
+                        </div>
+                    </div>
+
+                    <button
+                        class="copy-button"
+                        id="copy-license"
+                        type="button"
+                    >Copy license</button>
+                </div>
+
+                <article class="license-content">
+                    <h2>The MIT License (MIT)</h2>
+
+                    <p class="copyright">
+                        Copyright (c) 2026 wolf4605
+                    </p>
+
+                    <div class="legal-text" id="license-text">
+                        <p>
+                            Permission is hereby granted, free of charge,
+                            to any person obtaining a copy of this software
+                            and associated documentation files (the
+                            "Software"), to deal in the Software without
+                            restriction, including without limitation the
+                            rights to use, copy, modify, merge, publish,
+                            distribute, sublicense, and/or sell copies of
+                            the Software, and to permit persons to whom the
+                            Software is furnished to do so, subject to the
+                            following conditions:
+                        </p>
+
+                        <p>
+                            The above copyright notice and this permission
+                            notice shall be included in all copies or
+                            substantial portions of the Software.
+                        </p>
+
+                        <p>
+                            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT
+                            WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+                            INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+                            MERCHANTABILITY, FITNESS FOR A PARTICULAR
+                            PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+                            THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+                            ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+                            IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+                            ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+                            SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                            SOFTWARE.
+                        </p>
+                    </div>
+                </article>
+            </section>
+
+            <aside class="notice">
+                <strong>About this license</strong>
+                <p>
+                    The MIT License permits broad use, modification,
+                    and redistribution, including commercial use,
+                    provided the required copyright and permission
+                    notice are retained. It is not an access-control
+                    mechanism or a guarantee of ownership over third-party
+                    materials.
+                </p>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-inner">
+            <div class="footer-text">
+                © 2026 wolf4605. Licensed under the MIT License.
+            </div>
+
+            <div class="footer-links">
+                <a href="#license">MIT License</a>
+                <a href="https://opensource.org/license/mit"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Official license
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const root = document.documentElement;
+        const themeToggle = document.getElementById("theme-toggle");
+
+        function setTheme(theme) {
+            root.classList.toggle("dark", theme === "dark");
+            themeToggle.textContent = theme === "dark" ? "☀" : "☾";
+            themeToggle.setAttribute(
+                "aria-label",
+                theme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme"
+            );
+        }
+
+        const savedTheme = (() => {
+            try {
+                return localStorage.getItem("bondvault-theme");
+            } catch {
+                return null;
+            }
+        })();
+
+        const preferredTheme =
+            savedTheme ||
+            (window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light");
+
+        setTheme(preferredTheme);
+
+        themeToggle.addEventListener("click", () => {
+            const nextTheme = root.classList.contains("dark")
+                ? "light"
+                : "dark";
+
+            setTheme(nextTheme);
+
+            try {
+                localStorage.setItem("bondvault-theme", nextTheme);
+            } catch {
+                // The theme still works if storage is unavailable.
+            }
+        });
+
+        document
+            .getElementById("copy-license")
+            .addEventListener("click", async () => {
+                const button = document.getElementById("copy-license");
+                const licenseText = [
+                    "The MIT License (MIT)",
+                    "",
+                    document.querySelector(".copyright").textContent.trim(),
+                    "",
+                    document.getElementById("license-text").innerText.trim()
+                ].join("\n");
+
+                try {
+                    await navigator.clipboard.writeText(licenseText);
+                    button.textContent = "Copied!";
+                } catch {
+                    button.textContent = "Copy unavailable";
+                }
+
+                setTimeout(() => {
+                    button.textContent = "Copy license";
+                }, 2000);
+            });
+    </script>
+</body>
+</html>
