@@ -1,9 +1,35 @@
 """
-Contains all the Configurations Required in the application.
+* Project Name: BONDVAULT PK
+
+* Description: Contains all the Configurations Required in the application.
+
+* Author: Wolf4605
+* Email: mab4605@gmail.com
+
+* Date: 2026-10-20 17:39:33
+
+* Last Modified by: Wolf4605
+* Last Modified time: 2026-10-21 20:10:32
+
+* License: MIT
+* Copyright© BondVault PK. All rights reserved.
 """
 
 from .app_settings import AppSettings
+from .db_configs import AdminDBConfigs, DBConfigs
+from .prize_bonds import PrizeBondDenominations
+
+MAX_LOG_FILES: int = 3
+"""Maximum number of log files to keep."""
+MAX_LOG_FILE_SIZE: int = 10 * 1024 * 1024  # 10 MB
+"""Maximum size of a log file."""
 
 __all__ = [
-    "AppSettings"
+    "MAX_LOG_FILES",
+    "MAX_LOG_FILE_SIZE",
+    "AdminDBConfigs",
+    "AppSettings",
+    "DBConfigs",
+    "PrizeBondDenominations"
+
 ]

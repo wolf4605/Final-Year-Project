@@ -1,5 +1,5 @@
 [project]
-name = "BondVaut PK"
+name = "BondVaut_PK"
 
 version = "0.1.0"
 
@@ -14,9 +14,12 @@ authors = [
     ]
 licence = {name = "MIT License", "identifier" = "MIT", url = "https://wolf4605.github.io/bondvaultpk.github.io/"}
 
+initialize_db = false
+
 requires-python = ">=3.14"
 
 dependencies = [
+    "argon2-cffi>=25.1.0",
     "asyncpg>=0.32.0",
     "fastapi[standard]>=0.150.0",
     "scalar-fastapi>=1.9.1",
