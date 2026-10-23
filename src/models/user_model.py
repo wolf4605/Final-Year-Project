@@ -14,9 +14,13 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """
+from datetime import datetime
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from ..utilities.auth import hash_password
+from .base_model import DatabaseModel
 
 
 class UserRegister(BaseModel):
@@ -67,7 +71,30 @@ class UserRegister(BaseModel):
     @field_validator("contact")
     @classmethod
     def format_contact(cls, x:str):
-        if x.isdigit() and x.startswith("03"):
+        """Formatting the contact to start"""
+        if x.isdigit() and x.startswith("03") and len(x)==11:
             return x.replace("0","+92",1)
+        elif (x.startswith("+92") and x.count('+')==1 
+                and 
+                x.strip("+").isdigit() and len(x)==13):
+            return x
         else:
-            raise ValueError("Invalid Contact Number")
+            raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
+
+
+class UserInfo(DatabaseModel):
+    """Public user fields returned by database operations."""
+
+    id: UUID = Field(default=..., description="The user's unique identifier.")
+    username: str = Field(default=..., description="The user's unique username.")
+    email: str = Field(default=..., description="The user's email address.")
+    first_name: str | None = Field(default=..., description="The user's first name, if provided.")
+    last_name: str | None = Field(default=..., description="The user's last name, if provided.")
+    contact: str | None = Field(default=..., description="The user's contact number, if provided.")
+    created_at: datetime = Field(default=..., description="When the user account was created.")
+    is_verified: bool = Field(default=..., description="Whether the user's account is verified.")
+    verified_by: UUID | None = Field(default=..., description="The verifying administrator's ID, if verified.")
+    last_login: datetime | None = Field(default=..., description="When the user last signed in, if applicable.")
+
+
+__all__ = ["UserInfo", "UserRegister"]

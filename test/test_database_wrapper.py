@@ -1,99 +1,82 @@
-"""Focused tests for the database wrapper's generated query parameters."""
+"""Tests for raw SQL execution through the basic database wrapper."""
 
 import unittest
+from typing import Any
 from uuid import uuid4
 
-from src.database.wrapper import Database
-from src.models.bonds import RegisterBonds
-from src.models.database_models import AdminUpdate
+from src.database import Database
 
 
-class RecordingDatabase:
-    """Capture repository calls without requiring a PostgreSQL server."""
-
+class RecordingConnection:
     def __init__(self) -> None:
         self.query: str | None = None
-        self.args: tuple[object, ...] = ()
+        self.args: tuple[Any, ...] = ()
 
-    async def fetch(
-        self,
-        query: str,
-        *args: object,
-    ) -> list[dict[str, object]]:
+    async def fetch(self, query: str, *args: Any) -> list[Any]:
         self.query = query
         self.args = args
         return []
 
-    async def fetchrow(
-        self,
-        query: str,
-        *args: object,
-    ) -> None:
+    async def fetchrow(self, query: str, *args: Any) -> None:
         self.query = query
         self.args = args
+        return None
+
+    async def execute(self, query: str, *args: Any) -> str:
+        self.query = query
+        self.args = args
+        return "UPDATE 1"
 
 
-class DatabaseRepositoryTests(unittest.IsolatedAsyncioTestCase):
-    """Test repository behavior that can be validated without a live database."""
+class FakeAcquire:
+    def __init__(self, connection: RecordingConnection) -> None:
+        self.connection = connection
+
+    async def __aenter__(self) -> RecordingConnection:
+        return self.connection
+
+    async def __aexit__(self, *_: object) -> None:
+        return None
+
+
+class FakePool:
+    def __init__(self, connection: RecordingConnection) -> None:
+        self.connection = connection
+
+    def acquire(self) -> FakeAcquire:
+        return FakeAcquire(self.connection)
+
+
+class DatabaseWrapperTests(unittest.IsolatedAsyncioTestCase):
+    """Verify that SQL and bound values reach asyncpg unchanged."""
 
     def setUp(self) -> None:
         self.database = Database("postgresql://localhost/test")
-        self.recording_database = RecordingDatabase()
-        self.database.Market._db = self.recording_database  # type: ignore[assignment]
-        self.database.Admin._db = self.recording_database  # type: ignore[assignment]
-        self.database.Bond._db = self.recording_database  # type: ignore[assignment]
+        self.connection = RecordingConnection()
+        self.database._pool = FakePool(self.connection)  # type: ignore[assignment]
 
-    async def test_market_filters_use_sequential_placeholders(self) -> None:
-        owner_id = uuid4()
+    async def test_fetch_forwards_parameterized_sql_and_values(self) -> None:
+        user_id = uuid4()
+        query = 'SELECT "id" FROM "users" WHERE "id" = $1'
 
-        await self.database.Market.list(
-            category="sell",
-            posted_by=owner_id,
-            limit=25,
-            offset=10,
-        )
+        await self.database.fetch(query, user_id)
 
-        assert self.recording_database.query is not None
-        self.assertIn('"category" = $1', self.recording_database.query)
-        self.assertIn('"posted_by" = $2', self.recording_database.query)
-        self.assertIn("LIMIT $3 OFFSET $4", self.recording_database.query)
-        self.assertEqual(
-            self.recording_database.args,
-            ("sell", owner_id, 25, 10),
-        )
+        self.assertEqual(self.connection.query, query)
+        self.assertEqual(self.connection.args, (user_id,))
 
-    async def test_admin_update_uses_only_model_fields(self) -> None:
-        admin_id = uuid4()
+    async def test_execute_forwards_multiple_bound_values(self) -> None:
+        query = 'UPDATE "users" SET "last_login" = $2 WHERE "id" = $1'
+        user_id = uuid4()
 
-        await self.database.Admin.update(
-            admin_id,
-            AdminUpdate(first_name="Ada", is_superuser=True),
-        )
+        result = await self.database.execute(query, user_id, "now")
 
-        assert self.recording_database.query is not None
-        self.assertIn('"first_name" = $2', self.recording_database.query)
-        self.assertIn('"is_superuser" = $3', self.recording_database.query)
-        self.assertEqual(
-            self.recording_database.args,
-            (admin_id, "Ada", True),
-        )
+        self.assertEqual(result, "UPDATE 1")
+        self.assertEqual(self.connection.query, query)
+        self.assertEqual(self.connection.args, (user_id, "now"))
 
-    async def test_bond_registration_passes_numbers_as_array(self) -> None:
-        bondlist_id = uuid4()
-
-        await self.database.Bond.register(
-            RegisterBonds(
-                bondlist_id=bondlist_id,
-                bond_numbers=["001234", "001235"],
-            )
-        )
-
-        assert self.recording_database.query is not None
-        self.assertIn("unnest($2::VARCHAR[])", self.recording_database.query)
-        self.assertEqual(
-            self.recording_database.args,
-            (bondlist_id, ["001234", "001235"]),
-        )
+    async def test_empty_query_is_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            await self.database.fetch("  ")
 
 
 if __name__ == "__main__":

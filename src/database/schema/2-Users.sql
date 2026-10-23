@@ -4,7 +4,7 @@
 -- * Email: mab4605@gmail.com
 -- * Date: 2026-10-22 09:35:59
 -- * Last Modified by:   Wolf4605
--- * Last Modified time: 2026-10-23 06:01:38
+-- * Last Modified time: 2026-10-23 12:05:51
 -- * License: MIT
 -- * Copyright© BondVault PK. All rights reserved.
 CREATE TABLE IF NOT EXISTS "users"(
@@ -14,9 +14,10 @@ CREATE TABLE IF NOT EXISTS "users"(
     "password_hash" VARCHAR(255) NOT NULL,
     "first_name" VARCHAR(100),
     "last_name" VARCHAR(100),
-    "contact" VARCHAR(20),
+    "contact" VARCHAR(20) NOT NULL UNIQUE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "is_verified" BOOLEAN NOT NULL DEFAULT FALSE,
     "verified_by" UUID REFERENCES "admins"("id") ON DELETE SET NULL,
     "last_login" TIMESTAMPTZ DEFAULT NULL
 );
+

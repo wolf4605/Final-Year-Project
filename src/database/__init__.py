@@ -15,9 +15,8 @@
 * Copyright© BondVault PK. All rights reserved.
 """
 
+"""Shared PostgreSQL wrapper and connection pool."""
+
 from .wrapper import DB, Database
 
-__all__ = [
-    "DB",
-    "Database"
-]
+__all__ = ["DB", "Database"]

@@ -14,9 +14,13 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """
+from datetime import datetime
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from ..utilities.auth import hash_password
+from .base_model import DatabaseModel
 
 
 class AdminRegister(BaseModel):
@@ -70,7 +74,7 @@ class AdminRegister(BaseModel):
     @classmethod
     def format_contact(cls, x:str):
         """Formatting the contact to start"""
-        if x.isdigit() and x.startswith("03") and len(x)==13:
+        if x.isdigit() and x.startswith("03") and len(x)==11:
             return x.replace("0","+92",1)
         elif (x.startswith("+92") and x.count('+')==1 
               and 
@@ -78,3 +82,19 @@ class AdminRegister(BaseModel):
             return x
         else:
             raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
+
+
+class AdminInfo(DatabaseModel):
+    """Public administrator fields returned by database operations."""
+
+    id: UUID = Field(default=..., description="The administrator's unique identifier.")
+    username: str = Field(default=..., description="The administrator's unique username.")
+    email: str = Field(default=..., description="The administrator's email address.")
+    first_name: str | None = Field(default=..., description="The administrator's first name, if provided.")
+    last_name: str | None = Field(default=..., description="The administrator's last name, if provided.")
+    contact: str | None = Field(default=..., description="The administrator's contact number, if provided.")
+    created_at: datetime = Field(default=..., description="When the administrator account was created.")
+    is_superuser: bool = Field(default=..., description="Whether the administrator has superuser privileges.")
+
+
+__all__ = ["AdminInfo", "AdminRegister"]

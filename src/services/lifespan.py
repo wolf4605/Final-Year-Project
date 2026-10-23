@@ -14,15 +14,21 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import ParamSpecArgs
 
-from ..configs import AppSettings
+from fastapi import FastAPI
+
+from ..configs import AdminDBConfigs, AppSettings
+from ..database import DB
 from ..logging import get_logger, setup_logging
+from ..utilities.auth_tokens import validate_jwt_config
+from .db_initializor import DB_initializor
 
 
 @asynccontextmanager
-async def lifespan():
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    """Configure logging and manage the shared database connection pool."""
 
     # Actions to perform when API starts
     # 1. Setup logging
@@ -31,7 +37,16 @@ async def lifespan():
     logger.info("Logging System Configured.")
 
     if AppSettings.Initialize_Database is True:
-        # 2. Initialize the database.
-        pass
-    
-    yield
+        if not AdminDBConfigs.ADMIN_POSTGRES_USER or not AdminDBConfigs.ADMIN_POSTGRES_PASSWORD:
+            logger.warning("You have asked for initialization of database but have not provided [cyan]ADMIN_POSTGRES_USER[/] or [cyan]ADMIN_POSTGES_PASSWORD[/] in .env file." )
+         
+        else:
+            await DB_initializor().start()
+            logger.info("Database initialized now you can remove [cyan]ADMIN_POSTGRES_USER[/] or [cyan]ADMIN_POSTGES_PASSWORD[/] from .env file.")
+
+    await DB.pool_create()
+    validate_jwt_config()
+    try:
+        yield
+    finally:
+        await DB.pool_close()
