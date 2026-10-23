@@ -124,8 +124,8 @@ authentication/application layer before calling it.
 
 ### `bondlists`
 
-`Bondlist.create` accepts `src.models.bonds.BondListCreate`; list responses use
-`src.models.bonds.BondListInfo` and include the bond numbers.
+`Bondlist.create` accepts `src.models.bonds_models.BondListCreate`; list responses use
+`src.models.bonds_models.BondListInfo` and include the bond numbers.
 
 | Method | Description |
 | --- | --- |
@@ -139,7 +139,7 @@ The schema enforces one bondlist per user and denomination.
 
 ### `bonds`
 
-`Bond.register` accepts `src.models.bonds.RegisterBonds`, which allows one bond
+`Bond.register` accepts `src.models.bonds_models.RegisterBonds`, which allows one bond
 number or a list. It returns the number of newly inserted bonds; duplicates
 already in the same list are ignored.
 
@@ -157,8 +157,8 @@ target lists have different denominations.
 
 ### `drawlists`
 
-Create and update inputs use `src.models.bonds.Drawlist` and
-`src.models.database_models.DrawlistUpdate`. Drawlists are identified by their
+Create and update inputs use `src.models.bonds_models.Drawlist` and
+`src.models.bonds_models.DrawlistUpdate`. Drawlists are identified by their
 composite key `(draw_date, denomination)`.
 
 | Method | Description |
@@ -172,7 +172,7 @@ composite key `(draw_date, denomination)`.
 ### `market`
 
 Create/update inputs and returned rows use `MarketCreate`, `MarketUpdate`, and
-`MarketInfo` from `src.models.database_models`.
+`MarketInfo` from `src.models.market_model`.
 
 | Method | Description |
 | --- | --- |
@@ -219,13 +219,19 @@ user accounts. Treat `Blacklist.add` accordingly.
 
 Table request and public response models are in `src/models/`:
 
-- Existing registration and domain inputs: `admin_model.AdminRegister`,
-  `user_model.UserRegister`, `bonds.BondListCreate`, `bonds.RegisterBonds`,
-  and `bonds.Drawlist`.
-- Database operation models: `database_models.AdminInfo`, `AdminUpdate`,
-  `UserInfo`, `UserUpdate`, `BondlistUpdate`, `BondLocation`, `DrawlistUpdate`,
-  `MarketCreate`, `MarketInfo`, `MarketUpdate`, `ReportCreate`, `ReportInfo`,
-  `BlacklistCreate`, `BlacklistUpdate`, and `BlacklistInfo`.
+- Administrator models: `admin_model.AdminRegister`, `AdminInfo`, and
+  `AdminUpdate`.
+- User models: `user_model.UserRegister`, `UserInfo`, and `UserUpdate`.
+- Bond and draw models: `bonds_models.BondListCreate`, `BondListInfo`,
+  `RegisterBonds`, `Drawlist`, `BondlistUpdate`, `BondLocation`, and
+  `DrawlistUpdate`.
+- Market models: `market_model.MarketCreate`, `MarketInfo`, and `MarketUpdate`.
+- Report models: `report_model.ReportCreate` and `ReportInfo`.
+- Blacklist models: `blacklist_model.BlacklistCreate`, `BlacklistInfo`, and
+  `BlacklistUpdate`.
+
+All of these are also re-exported from `src.models`. `database_models` remains
+as a backward-compatible import module for database operation models.
 
 Update models use optional fields. Fields omitted from an update are preserved;
 explicitly passing `None` requests a SQL `NULL` value where the schema permits

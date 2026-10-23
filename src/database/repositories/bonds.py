@@ -18,8 +18,13 @@
 from typing import cast
 from uuid import UUID
 
-from ...models.bonds import BondListCreate, BondListInfo, RegisterBonds
-from ...models.database_models import BondlistUpdate, BondLocation
+from ...models.bonds_models import (
+    BondListCreate,
+    BondListInfo,
+    BondLocation,
+    BondlistUpdate,
+    RegisterBonds,
+)
 from ..connection import Database
 from .base import _Repository
 

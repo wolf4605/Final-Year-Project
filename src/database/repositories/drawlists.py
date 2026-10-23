@@ -18,8 +18,7 @@
 from datetime import datetime
 from typing import cast
 
-from ...models.bonds import Drawlist
-from ...models.database_models import DrawlistUpdate
+from ...models.bonds_models import Drawlist, DrawlistUpdate
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 

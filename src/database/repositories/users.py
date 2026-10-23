@@ -18,8 +18,8 @@
 from typing import cast
 from uuid import UUID
 
-from ...models.database_models import UserInfo, UserUpdate
-from ...models.user_model import UserRegister
+from ...models.user_model import UserInfo, UserRegister, UserUpdate
+from ...utilities.auth import verify_password
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 
@@ -74,6 +74,21 @@ class User(_Repository):
                 ),
             ),
         )
+
+    async def authenticate(self, username: str, password: str) -> UserInfo | None:
+        """Verify a user's username/email and password without exposing its hash."""
+        record = await self._db.fetchrow(
+            """
+            SELECT * FROM "users"
+            WHERE "username" = $1 OR LOWER("email") = LOWER($1)
+            ORDER BY ("username" = $1) DESC
+            LIMIT 1
+            """,
+            username,
+        )
+        if record is None or not verify_password(password, record["password_hash"]):
+            return None
+        return Database._one(UserInfo, record)
 
     async def get_by_email(self, email: str) -> UserInfo | None:
         """Find a user by its unique email address."""

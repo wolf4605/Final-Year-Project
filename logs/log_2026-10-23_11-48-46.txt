@@ -1,0 +1,11 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║     --- LOG START / LOG RESET / TRUNCATED AT 2026-10-23 11:48:47 ---     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+2026-10-23 11:48:47 | INFO     | src.services.lifespan | Logging System Configured.
+2026-10-23 11:48:47 | SUCCESS  | src.database.connection | Connection pool created.
+2026-10-23 11:48:47 | INFO     | uvicorn.error | Application startup complete.
+2026-10-23 11:52:36 | INFO     | uvicorn.error | Shutting down
+2026-10-23 11:52:36 | INFO     | uvicorn.error | Waiting for application shutdown.
+2026-10-23 11:52:36 | INFO     | uvicorn.error | Application shutdown complete.
+2026-10-23 11:52:36 | INFO     | uvicorn.error | Finished server process [14724]

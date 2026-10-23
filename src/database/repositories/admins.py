@@ -18,8 +18,8 @@
 from typing import cast
 from uuid import UUID
 
-from ...models.admin_model import AdminRegister
-from ...models.database_models import AdminInfo, AdminUpdate
+from ...models.admin_model import AdminInfo, AdminRegister, AdminUpdate
+from ...utilities.auth import verify_password
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 
@@ -75,6 +75,21 @@ class Admin(_Repository):
                 ),
             ),
         )
+
+    async def authenticate(self, username: str, password: str) -> AdminInfo | None:
+        """Verify an administrator's username/email and password."""
+        record = await self._db.fetchrow(
+            """
+            SELECT * FROM "admins"
+            WHERE "username" = $1 OR LOWER("email") = LOWER($1)
+            ORDER BY ("username" = $1) DESC
+            LIMIT 1
+            """,
+            username,
+        )
+        if record is None or not verify_password(password, record["password_hash"]):
+            return None
+        return Database._one(AdminInfo, record)
 
     async def get_by_email(self, email: str) -> AdminInfo | None:
         """Find an administrator by its unique email address."""

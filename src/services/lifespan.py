@@ -14,15 +14,20 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import ParamSpecArgs
+
+from fastapi import FastAPI
 
 from ..configs import AppSettings
+from ..database.wrapper import DB
 from ..logging import get_logger, setup_logging
+from ..utilities.auth_tokens import validate_jwt_config
 
 
 @asynccontextmanager
-async def lifespan():
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    """Configure logging and manage the shared database connection pool."""
 
     # Actions to perform when API starts
     # 1. Setup logging
@@ -30,8 +35,15 @@ async def lifespan():
     logger = get_logger()
     logger.info("Logging System Configured.")
 
-    if AppSettings.Initialize_Database is True:
-        # 2. Initialize the database.
-        pass
-    
-    yield
+    await DB.pool_create()
+
+    # if AppSettings.Initialize_Database is True:
+    #     # 2. Initialize the database.
+    #     pass
+
+    validate_jwt_config()
+    await DB.pool_create()
+    try:
+        yield
+    finally:
+        await DB.pool_close()

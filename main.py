@@ -17,16 +17,24 @@
 """
 
 import logging
+from collections.abc import Awaitable, Callable
 from pathlib import Path
+from time import perf_counter
 
 import asyncpg
 from fastapi import FastAPI, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from scalar_fastapi import AgentScalarConfig, Layout, get_scalar_api_reference
 from starlette.exceptions import HTTPException as _HTTPException
+from starlette.responses import Response
 
 from src import Tags
 from src.configs import AppSettings
+from src.routers.admin_auth import router as admin_auth_router
+from src.routers.user_auth import router as user_auth_router
+from src.services.lifespan import lifespan
+from src.utilities.auth_tokens import ACCESS_TOKEN_EXPIRES_HEADER, ACCESS_TOKEN_HEADER
 
 # ╔══════════════════════════════════════════════════════════╗
 # ║                  CONFIGURING THE LOGGER                  ║
@@ -46,61 +54,55 @@ app = FastAPI(
     contact=AppSettings.Contact[0],
     license_info=AppSettings.License,
     openapi_tags = Tags,
-    openapi_url="/"
-    # lifespan = lifespan
+    lifespan=lifespan,
 )
 """
 The main application variable used to run the Backend.
 """
-# ╔══════════════════════════════════════════════════════════╗
-# ║                    TESTING ENDPOINTS                     ║
-# ╚══════════════════════════════════════════════════════════╝
 
-# To Be removed before final build
 
 @app.get("/health")
-async def get_health():
-
+async def get_health() -> None:
+    """Return the existing health-check response."""
     raise TypeError("Unknown Value")
 
-# ╔══════════════════════════════════════════════════════════╗
-# ║                  ROUTERS & MIDDDLEWARE                   ║
-# ╚══════════════════════════════════════════════════════════╝
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["Authorization", "Content-Type"],
+    expose_headers=[ACCESS_TOKEN_HEADER, ACCESS_TOKEN_EXPIRES_HEADER],
+)
 
 
-# @app.middleware( middleware_type= "http")
-# async def audit_admin_actions(
-#     request: Request,
-#     call_next: Callable[[Request], Awaitable[Response]]
-# ) -> Response:
-#     """Audits the results of authenticated administrator API operations."""
-#     response: Response = await call_next(request)
-#     path: str = request.scope.get("path", "")
+@app.middleware("http")
+async def audit_admin_actions(
+    request: Request,
+    call_next: Callable[[Request], Awaitable[Response]],
+) -> Response:
+    """Audit administrator API requests without recording credentials."""
+    started_at = perf_counter()
+    response = await call_next(request)
+    if request.url.path.startswith("/admins/"):
+        payload = getattr(request.state, "admin_payload", None)
+        audit_logger = logging.getLogger("application.audit")
+        audit_logger.info(
+            "administrator API request",
+            extra={
+                "event": "admin.api.request",
+                "method": request.method,
+                "path": request.url.path,
+                "status_code": response.status_code,
+                "duration_ms": round((perf_counter() - started_at) * 1000, 3),
+                "admin_id": str(payload.id) if payload is not None else None,
+            },
+        )
+    return response
 
-#     if path.startswith("/admins/") and path != "/admins/auth/token":
-#         admin_id = getattr(
-#             request.state,
-#             "admin_id",
-#             None
-#         )
-#         client_ip = request.client.host if request.client else None
 
-#         if admin_id is not None and 200 <= response.status_code < 300:
-#             auth.audit_admin_actions(
-#                 f"{request.method} {path}",
-#                 admin_id,
-#                 client_ip = client_ip,
-#                 status_code = response.status_code
-#             )
-#         elif response.status_code >= 400:
-#             auth.audit_admin_denial(
-#                 request.method,
-#                 path,
-#                 response.status_code,
-#                 client_ip = client_ip
-#             )
-
-#     return response
+app.include_router(user_auth_router)
+app.include_router(admin_auth_router)
 
 
 # ==================== SCALAR DOCS SETUP ====================

@@ -21,6 +21,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field, field_validator
 
 from ..configs import PrizeBondDenominations
+from .base_model import DatabaseModel
 
 
 class Drawlist(BaseModel):
@@ -109,3 +110,44 @@ class BondInfo(BaseModel):
     """The bondlist id in the database that this bond belongs to."""
     denomination: PrizeBondDenominations = Field(default=..., description="The denomination of the bond.")
     """The denomination of the bond."""
+
+
+class BondlistUpdate(BaseModel):
+    """Fields that can be changed on a bondlist."""
+
+    denomination: PrizeBondDenominations | None = Field(
+        default=None,
+        description="The denomination to assign to the bondlist.",
+    )
+
+
+class BondLocation(DatabaseModel):
+    """A bond's list and owner, with the applicable denomination."""
+
+    bond_number: str = Field(default=..., description="The number printed on the prize bond.")
+    bondlist_id: UUID = Field(default=..., description="The identifier of the bondlist containing this bond.")
+    denomination: PrizeBondDenominations = Field(default=..., description="The bond's denomination.")
+    user_id: UUID = Field(default=..., description="The identifier of the bondlist owner.")
+
+
+class DrawlistUpdate(BaseModel):
+    """Mutable prize-result fields for an existing drawlist."""
+
+    first_winner: str | None = Field(default=None, description="The first-prize winning bond number.")
+    first_prize: int | None = Field(default=None, ge=0, description="The first-prize amount in PKR.")
+    second_winner: list[str] | None = Field(default=None, description="The second-prize winning bond numbers.")
+    second_prize: int | None = Field(default=None, ge=0, description="The second-prize amount in PKR.")
+    other_winners: list[str] | None = Field(default=None, description="The other winning bond numbers.")
+    other_prize: int | None = Field(default=None, ge=0, description="The other-prize amount in PKR.")
+
+
+__all__ = [
+    "BondInfo",
+    "BondListCreate",
+    "BondListInfo",
+    "BondLocation",
+    "BondlistUpdate",
+    "Drawlist",
+    "DrawlistUpdate",
+    "RegisterBonds",
+]

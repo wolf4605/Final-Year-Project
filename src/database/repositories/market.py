@@ -18,7 +18,7 @@
 from typing import Any, cast
 from uuid import UUID
 
-from ...models.database_models import MarketCreate, MarketInfo, MarketUpdate
+from ...models.market_model import MarketCreate, MarketInfo, MarketUpdate
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 

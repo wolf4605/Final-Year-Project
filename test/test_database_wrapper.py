@@ -4,8 +4,8 @@ import unittest
 from uuid import uuid4
 
 from src.database.wrapper import Database
-from src.models.bonds import RegisterBonds
-from src.models.database_models import AdminUpdate
+from src.models.bonds_models import RegisterBonds
+from src.models import AdminUpdate
 
 
 class RecordingDatabase:

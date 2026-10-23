@@ -29,5 +29,8 @@ def verify_password(password: str, hash: str) -> bool:
     """Verify a password against a hashed password."""
     try:
         return _Password_Hasher.verify(hash, password)
-    except argon2.exceptions.VerifyMismatchError:
+    except (
+        argon2.exceptions.InvalidHashError,
+        argon2.exceptions.VerificationError,
+    ):
         return False

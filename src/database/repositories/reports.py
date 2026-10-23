@@ -18,7 +18,7 @@
 from typing import Any, cast
 from uuid import UUID
 
-from ...models.database_models import ReportCreate, ReportInfo
+from ...models.report_model import ReportCreate, ReportInfo
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 

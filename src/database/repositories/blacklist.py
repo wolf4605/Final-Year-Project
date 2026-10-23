@@ -18,7 +18,7 @@
 from typing import cast
 from uuid import UUID
 
-from ...models.database_models import BlacklistCreate, BlacklistInfo, BlacklistUpdate
+from ...models.blacklist_model import BlacklistCreate, BlacklistInfo, BlacklistUpdate
 from ..connection import Database
 from .base import _Repository, _validate_pagination
 

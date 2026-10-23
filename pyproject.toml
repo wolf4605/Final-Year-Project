@@ -3,7 +3,10 @@ name = "BondVaut_PK"
 
 version = "0.1.0"
 
-description = "Manage Pakistani prize-bond lists and user sessions.\nRegister an account and sign in to receive bearer access and refresh tokens. Send the access token in the `Authorization: Bearer <token>` header to use protected user and bond operations. Refresh and logout operations use a refresh token in the request body. User refresh and logout routes also require an active user access token.\nAdministrator authentication is provided separately. Sessions expire after 15 minutes without activity, and active sessions are cleared when the application process restarts."
+description = """
+Manage Pakistani prize-bond lists and user sessions.
+Users and administrators sign in with separate endpoints and receive JWT bearer access tokens. Authenticated API calls renew the idle expiry; clients must store the replacement token from the X-Access-Token response header. Tokens expire after the configured idle timeout.
+"""
 
 summary = "Manage prize-bond lists and authenticated user sessions."
 
@@ -22,5 +25,6 @@ dependencies = [
     "argon2-cffi>=25.1.0",
     "asyncpg>=0.32.0",
     "fastapi[standard]>=0.150.0",
+    "PyJWT>=2.10.1",
     "scalar-fastapi>=1.9.1",
 ]

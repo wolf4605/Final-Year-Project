@@ -14,9 +14,13 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """
+from datetime import datetime
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from ..utilities.auth import hash_password
+from .base_model import DatabaseModel
 
 
 class AdminRegister(BaseModel):
@@ -78,3 +82,42 @@ class AdminRegister(BaseModel):
             return x
         else:
             raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
+
+
+class AdminInfo(DatabaseModel):
+    """Public administrator fields returned by database operations."""
+
+    id: UUID = Field(default=..., description="The administrator's unique identifier.")
+    username: str = Field(default=..., description="The administrator's unique username.")
+    email: str = Field(default=..., description="The administrator's email address.")
+    first_name: str | None = Field(default=..., description="The administrator's first name, if provided.")
+    last_name: str | None = Field(default=..., description="The administrator's last name, if provided.")
+    contact: str | None = Field(default=..., description="The administrator's contact number, if provided.")
+    created_at: datetime = Field(default=..., description="When the administrator account was created.")
+    is_superuser: bool = Field(default=..., description="Whether the administrator has superuser privileges.")
+
+
+class AdminUpdate(BaseModel):
+    """Fields that can be changed on an administrator account."""
+
+    username: str | None = Field(default=None, description="The administrator's new username.")
+    email: str | None = Field(default=None, description="The administrator's new email address.")
+    first_name: str | None = Field(default=None, description="The administrator's new first name.")
+    last_name: str | None = Field(default=None, description="The administrator's new last name.")
+    contact: str | None = Field(default=None, description="The administrator's new contact number.")
+    is_superuser: bool | None = Field(default=None, description="Whether to grant superuser privileges.")
+
+    @field_validator("contact")
+    @classmethod
+    def format_contact(cls, x:str):
+        """Formatting the contact to start"""
+        if x.isdigit() and x.startswith("03") and len(x)==13:
+            return x.replace("0","+92",1)
+        elif (x.startswith("+92") and x.count('+')==1 
+              and 
+              x.strip("+").isdigit() and len(x)==13):
+            return x
+        else:
+            raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
+
+__all__ = ["AdminInfo", "AdminRegister", "AdminUpdate"]
