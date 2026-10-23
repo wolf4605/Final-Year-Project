@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 * Project Name: BONDVAULT PK
 
@@ -14,10 +15,14 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """"""Tests for JWT authentication and typed FastAPI principal payloads."""
+=======
+"""Tests for JWT authentication and typed FastAPI principal payloads."""
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 import os
 import unittest
 from datetime import UTC, datetime, timedelta
+<<<<<<< HEAD
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
 
@@ -25,6 +30,15 @@ import jwt
 from fastapi import FastAPI
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.testclient import TestClient
+=======
+from unittest.mock import patch
+from uuid import UUID, uuid4
+
+import jwt
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from fastapi.security import OAuth2PasswordRequestForm
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 from starlette.requests import Request
 from starlette.responses import Response
 
@@ -39,6 +53,7 @@ from src.utilities import auth_dependencies
 from src.utilities.auth import verify_password
 from src.utilities.auth_tokens import create_access_token, decode_access_token
 
+<<<<<<< HEAD
 TEST_SECRET = "test-signing-key-with-at-least-32-bytes-long"
 
 
@@ -49,6 +64,12 @@ def _awaited_argument(mock: AsyncMock, index: int) -> object:
     return call.args[index]
 
 
+=======
+
+TEST_SECRET = "test-signing-key-with-at-least-32-bytes-long"
+
+
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 class AuthTokenTests(unittest.TestCase):
     """Exercise token signing, expiry, roles, and endpoint registration."""
 
@@ -120,6 +141,14 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             last_login=None,
         )
 
+<<<<<<< HEAD
+=======
+        class FakeUserRepository:
+            async def get_by_id(self, requested_id: UUID) -> UserInfo:
+                self.requested_id = requested_id
+                return payload
+
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         with patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}):
             issued_at = datetime.now(UTC) - timedelta(minutes=5)
             token = jwt.encode(
@@ -135,11 +164,18 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             )
             credentials = token
             response = Response()
+<<<<<<< HEAD
             fetchrow = AsyncMock(return_value=payload.model_dump())
             with patch.object(
                 auth_dependencies.DB,
                 "fetchrow",
                 fetchrow,
+=======
+            with patch.object(
+                auth_dependencies.DB,
+                "User",
+                FakeUserRepository(),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             ):
                 resolved_payload = await auth_dependencies.get_current_user(
                     credentials,
@@ -149,7 +185,10 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             refreshed = decode_access_token(response.headers["X-Access-Token"])
 
         self.assertEqual(resolved_payload, payload)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), user_id)
+=======
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(refreshed.sub, user_id)
         self.assertEqual(refreshed.role, "user")
         self.assertGreaterEqual(
@@ -173,6 +212,7 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             last_login=None,
         )
 
+<<<<<<< HEAD
         fetchrow = AsyncMock(
             return_value=user.model_dump() | {"password_hash": "hashed-password"}
         )
@@ -182,6 +222,22 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
                 patch.object(user_auth_routes.DB, "fetchrow", fetchrow),
                 patch.object(user_auth_routes.DB, "fetchval", fetchval),
                 patch.object(user_auth_routes, "verify_password", return_value=True),
+=======
+        class FakeUserRepository:
+            async def authenticate(self, username, password):
+                self.credentials = (username, password)
+                return user
+
+            async def record_login(self, identifier):
+                self.recorded_id = identifier
+                return True
+
+        with patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}):
+            with patch.object(
+                user_auth_routes.DB,
+                "User",
+                FakeUserRepository(),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             ):
                 result = await user_auth_routes.login_user(
                     OAuth2PasswordRequestForm(
@@ -193,8 +249,11 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertIsInstance(result, UserLoginResponse)
         self.assertEqual(result.payload, user)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), "test-user")
         self.assertEqual(_awaited_argument(fetchval, 1), user_id)
+=======
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(claims.sub, user_id)
         self.assertEqual(claims.role, "user")
 
@@ -211,6 +270,7 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             is_superuser=True,
         )
 
+<<<<<<< HEAD
         fetchrow = AsyncMock(
             return_value=admin.model_dump() | {"password_hash": "hashed-password"}
         )
@@ -218,6 +278,18 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             with (
                 patch.object(admin_auth_routes.DB, "fetchrow", fetchrow),
                 patch.object(admin_auth_routes, "verify_password", return_value=True),
+=======
+        class FakeAdminRepository:
+            async def authenticate(self, username, password):
+                self.credentials = (username, password)
+                return admin
+
+        with patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}):
+            with patch.object(
+                admin_auth_routes.DB,
+                "Admin",
+                FakeAdminRepository(),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             ):
                 result = await admin_auth_routes.login_admin(
                     OAuth2PasswordRequestForm(
@@ -229,7 +301,10 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertIsInstance(result, AdminLoginResponse)
         self.assertEqual(result.payload, admin)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), "test-admin")
+=======
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(claims.sub, admin_id)
         self.assertEqual(claims.role, "admin")
 
@@ -248,6 +323,7 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             last_login=None,
         )
 
+<<<<<<< HEAD
         app = FastAPI()
         app.include_router(user_auth_router)
         fetchrow = AsyncMock(
@@ -259,6 +335,23 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             patch.object(user_auth_routes.DB, "fetchrow", fetchrow),
             patch.object(user_auth_routes.DB, "fetchval", fetchval),
             patch.object(user_auth_routes, "verify_password", return_value=True),
+=======
+        class FakeUserRepository:
+            async def authenticate(self, username: str, password: str) -> UserInfo:
+                self.credentials = (username, password)
+                return user
+
+            async def record_login(self, identifier: UUID) -> bool:
+                self.recorded_id = identifier
+                return True
+
+        app = FastAPI()
+        app.include_router(user_auth_router)
+        fake_users = FakeUserRepository()
+        with (
+            patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}),
+            patch.object(user_auth_routes.DB, "User", fake_users),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             TestClient(app) as client,
         ):
             response = client.post(
@@ -267,8 +360,12 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertEqual(response.status_code, 200)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), "user@example.com")
         self.assertEqual(_awaited_argument(fetchval, 1), user_id)
+=======
+        self.assertEqual(fake_users.credentials, ("user@example.com", "secret"))
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(response.json()["payload"]["id"], str(user_id))
         self.assertEqual(response.json()["token_type"], "bearer")
 
@@ -285,6 +382,7 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             is_superuser=True,
         )
 
+<<<<<<< HEAD
         app = FastAPI()
         app.include_router(admin_auth_router)
         fetchrow = AsyncMock(
@@ -294,6 +392,19 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}),
             patch.object(admin_auth_routes.DB, "fetchrow", fetchrow),
             patch.object(admin_auth_routes, "verify_password", return_value=True),
+=======
+        class FakeAdminRepository:
+            async def authenticate(self, username: str, password: str) -> AdminInfo:
+                self.credentials = (username, password)
+                return admin
+
+        app = FastAPI()
+        app.include_router(admin_auth_router)
+        fake_admins = FakeAdminRepository()
+        with (
+            patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}),
+            patch.object(admin_auth_routes.DB, "Admin", fake_admins),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             TestClient(app) as client,
         ):
             response = client.post(
@@ -302,7 +413,11 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertEqual(response.status_code, 200)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), "admin@example.com")
+=======
+        self.assertEqual(fake_admins.credentials, ("admin@example.com", "secret"))
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(response.json()["payload"]["id"], str(admin_id))
         self.assertEqual(response.json()["token_type"], "bearer")
 
@@ -319,6 +434,14 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             is_superuser=True,
         )
 
+<<<<<<< HEAD
+=======
+        class FakeAdminRepository:
+            async def get_by_id(self, requested_id: UUID) -> AdminInfo:
+                self.requested_id = requested_id
+                return payload
+
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         with patch.dict(os.environ, {"JWT_SECRET_KEY": TEST_SECRET}):
             credentials = create_access_token(admin_id, "admin")
             response = Response()
@@ -330,11 +453,18 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
                     "headers": [],
                 }
             )
+<<<<<<< HEAD
             fetchrow = AsyncMock(return_value=payload.model_dump())
             with patch.object(
                 auth_dependencies.DB,
                 "fetchrow",
                 fetchrow,
+=======
+            with patch.object(
+                auth_dependencies.DB,
+                "Admin",
+                FakeAdminRepository(),
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
             ):
                 resolved_payload = await auth_dependencies.get_current_admin(
                     credentials,
@@ -345,7 +475,10 @@ class ActivityRenewalTests(unittest.IsolatedAsyncioTestCase):
             refreshed = decode_access_token(response.headers["X-Access-Token"])
 
         self.assertEqual(resolved_payload, payload)
+<<<<<<< HEAD
         self.assertEqual(_awaited_argument(fetchrow, 1), admin_id)
+=======
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         self.assertEqual(request.state.admin_payload, payload)
         self.assertEqual(refreshed.sub, admin_id)
         self.assertEqual(refreshed.role, "admin")

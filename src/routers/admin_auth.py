@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 * Project Name: BONDVAULT PK
 
@@ -14,10 +15,14 @@
 * License: MIT
 * Copyright© BondVault PK. All rights reserved.
 """"""Administrator login and authenticated profile endpoints."""
+=======
+"""Administrator login and authenticated profile endpoints."""
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 import logging
 from typing import Annotated
 
+<<<<<<< HEAD
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.exceptions import HTTPException
@@ -26,12 +31,24 @@ from ..database import DB
 from ..models.admin_model import AdminInfo
 from ..responses import AdminLoginResponse
 from ..utilities.auth import verify_password
+=======
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
+
+from ..database.wrapper import DB
+from ..models.admin_model import AdminInfo
+from ..models.auth_model import AdminLoginResponse
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 from ..utilities.auth_dependencies import get_current_admin
 from ..utilities.auth_tokens import create_access_token, token_lifetime
 
 logger = logging.getLogger("application.audit")
+<<<<<<< HEAD
 router = APIRouter(prefix="/admins",
                    tags=["Admin Authentication"])
+=======
+router = APIRouter(prefix="/admins", tags=["Admin Authentication"])
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 
 @router.post(
@@ -43,6 +60,7 @@ async def login_admin(
     credentials: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> AdminLoginResponse:
     """Authenticate an administrator with username/email and password form data."""
+<<<<<<< HEAD
     record = await DB.fetchrow(
         """
         SELECT "id", "username", "email", "password_hash", "first_name",
@@ -58,6 +76,13 @@ async def login_admin(
         credentials.password,
         record["password_hash"],
     ):
+=======
+    admin = await DB.Admin.authenticate(
+        credentials.username,
+        credentials.password,
+    )
+    if admin is None:
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         logger.warning(
             "administrator authentication failed",
             extra={"event": "auth.login.failed", "role": "admin"},
@@ -68,7 +93,10 @@ async def login_admin(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+<<<<<<< HEAD
     admin = AdminInfo.model_validate(dict(record))
+=======
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
     token = create_access_token(admin.id, "admin")
     logger.info(
         "administrator authenticated",
@@ -91,10 +119,17 @@ async def login_admin(
     summary="Get the authenticated administrator's profile",
 )
 async def get_admin_info(
+<<<<<<< HEAD
     admin_info: Annotated[AdminInfo, Depends(get_current_admin)],
 ) -> AdminInfo:
     """Return the authenticated administrator's profile without a separate ID."""
     return admin_info
+=======
+    payload: Annotated[AdminInfo, Depends(get_current_admin)],
+) -> AdminInfo:
+    """Return the authenticated administrator's profile without a separate ID."""
+    return payload
+>>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 
 __all__ = ["router"]
