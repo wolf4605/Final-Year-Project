@@ -97,31 +97,4 @@ class AdminInfo(DatabaseModel):
     is_superuser: bool = Field(default=..., description="Whether the administrator has superuser privileges.")
 
 
-<<<<<<< HEAD
 __all__ = ["AdminInfo", "AdminRegister"]
-=======
-class AdminUpdate(BaseModel):
-    """Fields that can be changed on an administrator account."""
-
-    username: str | None = Field(default=None, description="The administrator's new username.")
-    email: str | None = Field(default=None, description="The administrator's new email address.")
-    first_name: str | None = Field(default=None, description="The administrator's new first name.")
-    last_name: str | None = Field(default=None, description="The administrator's new last name.")
-    contact: str | None = Field(default=None, description="The administrator's new contact number.")
-    is_superuser: bool | None = Field(default=None, description="Whether to grant superuser privileges.")
-
-    @field_validator("contact")
-    @classmethod
-    def format_contact(cls, x:str):
-        """Formatting the contact to start"""
-        if x.isdigit() and x.startswith("03") and len(x)==13:
-            return x.replace("0","+92",1)
-        elif (x.startswith("+92") and x.count('+')==1 
-              and 
-              x.strip("+").isdigit() and len(x)==13):
-            return x
-        else:
-            raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
-
-__all__ = ["AdminInfo", "AdminRegister", "AdminUpdate"]
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a

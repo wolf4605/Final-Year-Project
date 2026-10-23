@@ -1,4 +1,19 @@
-"""FastAPI dependencies for authenticated users and administrators."""
+"""
+* Project Name: BONDVAULT PK
+
+* Description: 
+
+* Author: Wolf4605
+* Email: mab4605@gmail.com
+
+* Date: 2026-10-23 11:19:18
+
+* Last Modified by: Wolf4605
+* Last Modified time: 2026-10-23 20:23:02
+
+* License: MIT
+* Copyright© BondVault PK. All rights reserved.
+""""""FastAPI dependencies for authenticated users and administrators."""
 
 from typing import Annotated, Literal
 from uuid import UUID
@@ -8,13 +23,9 @@ from fastapi import Depends, HTTPException, Request, Response, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import ValidationError
 
-<<<<<<< HEAD
 from ..database import DB
-=======
-from ..database.wrapper import DB
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
-from ..models.auth_model import TokenClaims
 from ..models.admin_model import AdminInfo
+from ..models.auth_model import TokenClaims
 from ..models.user_model import UserInfo
 from .auth_tokens import (
     ACCESS_TOKEN_EXPIRES_HEADER,
@@ -83,7 +94,6 @@ async def get_current_user(
     if claims.role != "user":
         raise _unauthorized()
 
-<<<<<<< HEAD
     record = await DB.fetchrow(
         """
         SELECT "id", "username", "email", "first_name", "last_name",
@@ -96,11 +106,6 @@ async def get_current_user(
     if record is None:
         raise _unauthorized()
     payload = UserInfo.model_validate(dict(record))
-=======
-    payload = await DB.User.get_by_id(claims.sub)
-    if payload is None:
-        raise _unauthorized()
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
     _refresh_response(response, payload.id, "user")
     return payload
@@ -119,7 +124,6 @@ async def get_current_admin(
     if claims.role != "admin":
         raise _unauthorized()
 
-<<<<<<< HEAD
     record = await DB.fetchrow(
         """
         SELECT "id", "username", "email", "first_name", "last_name",
@@ -132,11 +136,6 @@ async def get_current_admin(
     if record is None:
         raise _unauthorized()
     payload = AdminInfo.model_validate(dict(record))
-=======
-    payload = await DB.Admin.get_by_id(claims.sub)
-    if payload is None:
-        raise _unauthorized()
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
     request.state.admin_payload = payload
     _refresh_response(response, payload.id, "admin")

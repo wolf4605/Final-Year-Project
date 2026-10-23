@@ -79,11 +79,7 @@ class UserRegister(BaseModel):
                 x.strip("+").isdigit() and len(x)==13):
             return x
         else:
-<<<<<<< HEAD
             raise ValueError("Invalid Contact Number. Please use a valid Pakistani Mobile Operator Number.")
-=======
-            raise ValueError("Invalid Contact Number")
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 
 class UserInfo(DatabaseModel):
@@ -101,18 +97,4 @@ class UserInfo(DatabaseModel):
     last_login: datetime | None = Field(default=..., description="When the user last signed in, if applicable.")
 
 
-<<<<<<< HEAD
 __all__ = ["UserInfo", "UserRegister"]
-=======
-class UserUpdate(BaseModel):
-    """Fields that can be changed on a user account."""
-
-    username: str | None = Field(default=None, description="The user's new username.")
-    email: str | None = Field(default=None, description="The user's new email address.")
-    first_name: str | None = Field(default=None, description="The user's new first name.")
-    last_name: str | None = Field(default=None, description="The user's new last name.")
-    contact: str | None = Field(default=None, description="The user's new contact number.")
-
-
-__all__ = ["UserInfo", "UserRegister", "UserUpdate"]
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a

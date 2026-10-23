@@ -42,7 +42,6 @@ class UserLoginResponse(BaseModel):
     expires_in: int = Field(ge=1, description="Token lifetime in seconds.")
     payload: models.UserInfo
 
-
 class AdminLoginResponse(BaseModel):
     """Access token and public administrator information returned after login."""
 

@@ -16,7 +16,6 @@
 """
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-<<<<<<< HEAD
 
 from fastapi import FastAPI
 
@@ -25,15 +24,6 @@ from ..database import DB
 from ..logging import get_logger, setup_logging
 from ..utilities.auth_tokens import validate_jwt_config
 from .db_initializor import DB_initializor
-=======
-
-from fastapi import FastAPI
-
-from ..configs import AppSettings
-from ..database.wrapper import DB
-from ..logging import get_logger, setup_logging
-from ..utilities.auth_tokens import validate_jwt_config
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 
 @asynccontextmanager
@@ -46,7 +36,6 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     logger = get_logger()
     logger.info("Logging System Configured.")
 
-<<<<<<< HEAD
     if AppSettings.Initialize_Database is True:
         if not AdminDBConfigs.ADMIN_POSTGRES_USER or not AdminDBConfigs.ADMIN_POSTGRES_PASSWORD:
             logger.warning("You have asked for initialization of database but have not provided [cyan]ADMIN_POSTGRES_USER[/] or [cyan]ADMIN_POSTGES_PASSWORD[/] in .env file." )
@@ -57,16 +46,6 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
     await DB.pool_create()
     validate_jwt_config()
-=======
-    await DB.pool_create()
-
-    # if AppSettings.Initialize_Database is True:
-    #     # 2. Initialize the database.
-    #     pass
-
-    validate_jwt_config()
-    await DB.pool_create()
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
     try:
         yield
     finally:

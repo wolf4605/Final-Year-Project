@@ -15,11 +15,10 @@
 * Copyright© BondVault PK. All rights reserved.
 """
 
-<<<<<<< HEAD
 from pathlib import Path
 
 from .. import models
-from ..configs import AdminDBConfigs, PrizeBondDenominations
+from ..configs import AdminDBConfigs
 from ..database import Database
 from ..logging import get_logger
 
@@ -32,18 +31,6 @@ def _ordered_missing_tables(
 ) -> list[str]:
     """Keep missing tables in their declared prerequisite order."""
     return [table for table in tables if table not in existing_tables]
-=======
-from gc import is_finalized
-from pathlib import Path
-from pickle import NONE
-
-from ..configs import AdminDBConfigs
-from ..database import Database
-from ..logging import get_logger
-from .. import models
-
-logger = get_logger()
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
 
 class DB_initializor:
@@ -77,17 +64,10 @@ class DB_initializor:
 
         existing_tables:set[str] = {row["table_name"] for row in table_names_db}
 
-<<<<<<< HEAD
         missing_tables = _ordered_missing_tables(self.__TABLES, existing_tables)
 
         if missing_tables:
             return missing_tables
-=======
-        missing_tables = set(self.__TABLES) - existing_tables
-
-        if missing_tables:
-            return list(missing_tables)
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
         return None
 
@@ -96,11 +76,7 @@ class DB_initializor:
 
         empty_tables = []
         for name in self.__TABLES:
-<<<<<<< HEAD
             row = await self.__db.fetchrow(f"SELECT 1 FROM \"{name}\" LIMIT 1")
-=======
-            row = await self.__db.fetchrow(f"SELECT 1 FROM \"{name}\ LIMIT 1")
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
 
             if row is None:
                 empty_tables.append(name)
@@ -152,7 +128,6 @@ class DB_initializor:
         """Populates the empty tables with some seed data."""
 
         empty_tables = await self.__get_empty_tables()
-<<<<<<< HEAD
         if empty_tables:
             for name in empty_tables:
                 if name == "admins":
@@ -226,14 +201,6 @@ class DB_initializor:
                     return True
 
 
-=======
-
-        if empty_tables:
-            for name in empty_tables:
-                if name == "admins":
-                
-    
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
     async def start(self):
         """Start the data population procedure."""
 
@@ -245,13 +212,9 @@ class DB_initializor:
             await self.__db.pool_create()
             await self.__create_tables()
             await self.__create_func_triggers()
-<<<<<<< HEAD
             await self.__populate_empty_tables()
             await self.__db.pool_close()
             
-=======
-
->>>>>>> 650ab09f5fa893458b064e3f3afe2646e080165a
         except ConnectionError:
             self._is_intialized = False
             raise
